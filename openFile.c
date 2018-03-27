@@ -47,7 +47,8 @@ int openFile(char fileName[], char text[columns][rows]) {
 		if( bre) 
 			break;
 	}
-
+	
+	fclose(fp);
 	return 0;
 	
 } 
