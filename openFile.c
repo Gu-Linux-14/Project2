@@ -6,7 +6,7 @@
 int columns = 80;
 int rows = 25;
 
-int openFile(char fileName[], char text[columns][rows]) {
+int openFile(char fileName[], char text[rows][columns]) {
 	FILE *fp;
 	if(!(fp = fopen (fileName, "r"))){
 		printw("File not found");
@@ -18,17 +18,18 @@ int openFile(char fileName[], char text[columns][rows]) {
 	int j = 0; //rows
 	while((temp = fgetc(fp)) != EOF)
 	{
-		if(i == columns){
-			text[i][j] = '\n';
+		if(i == columns - 1){
+			text[j][i] = '\n';
 			j++;
+			i = 0;
 		}
-		if(j == rows){
+		if(j == rows - 1){
 			printw("File too large, cannot open to edit");
 			refresh();
 			return -1;
 		}
-		text[i][j] =  temp;
-		text[i+1][j] = '\0';
+		text[j][i] =  temp;
+		text[j][i+1] = '\0';
 		i++;
 	}
 
@@ -36,10 +37,10 @@ int openFile(char fileName[], char text[columns][rows]) {
 	for(int k = 0; k < rows; k++)
 	{
 		for(int g = 0; g < columns; g++) {
-			printw("%c", text[g][k]);
+			printw("%c", text[k][g]);
 			refresh();
 
-			if (text[g][k] == '\0') {
+			if (text[k][g] == '\0') {
 				bre = true;
 				break;
 			}
@@ -53,14 +54,3 @@ int openFile(char fileName[], char text[columns][rows]) {
 	
 } 
 
-int main(int argc, char*argv[])
-{
-	char text[columns][rows];
-	initscr();
-	openFile(argv[1], text);
-	getch();
-	endwin();
-
-	return 0;
-
-}
