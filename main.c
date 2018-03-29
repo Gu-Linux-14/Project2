@@ -100,7 +100,7 @@ int textEditor(char text[25][80], bool insMode, string fName){
 				break;
 			case KEY_ENTER:	//enter or insert new line
 				if(insMode){	//if insert mode
-					insert(text, y, cursorPosition);
+					insert(text, &y, &cursorPosition);
 					x = cursorPosition;
 					move(y,x);
 				}
@@ -108,14 +108,14 @@ int textEditor(char text[25][80], bool insMode, string fName){
 			case KEY_BACKSPACE: //backspace
 				if(insMode){ //if insert mode
 					char ky = inKey;
-					edit(text, y, x, ky);
+					edit(text, &y, &x, ky);
 					move(y,x);
 				}
 				break;
 			default:
 				if(insMode && (inKey > 31 && inKey < 127)){	//if insert mode and printing character
 					char ky = inKey;
-					edit(text, y, x, ky);
+					edit(text, &y, &x, ky);
 					move(y,x);
 				}
 			break;
