@@ -1,10 +1,10 @@
 #include <ncurses.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include "openFile.h"
 //ncurses should already be open with a new window.
-int columns = 80;
-int rows = 25;
+//int columns = 80;
+//int rows = 25;
 
 int openFile(char fileName[], char text[rows][columns]) {
 	FILE *fp;
