@@ -30,7 +30,8 @@ int main(int argc, char* argv[]){
 }
 
 int textEditor(char text[25][80], bool insMode, string fName){
-	int inKey, cursorPosition, x, y = 0;
+	int inKey, cursorPosition, x = 0;
+	int y = 2;	//since top 2 lines are uneditable
 
 	while(!exitFlag){
 		inKey = getch();
