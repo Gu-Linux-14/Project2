@@ -1,8 +1,8 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-int columns = 80;
-int rows = 25;
+//int columns = 80;
+//int rows = 25;
 
 int saveFile (char fileName[], char text[rows][columns]) {
 	FILE *ofp;
