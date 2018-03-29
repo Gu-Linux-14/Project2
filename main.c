@@ -4,8 +4,8 @@
 
 
 int main(int argc, char* argv[]){
-	int rows = 25;
-	int columns = 80;
+	int rows = 500;
+	int columns = 1000;
 	char text[rows][columns];
 	char key;
 	string fName = argv[1];
@@ -30,32 +30,37 @@ int main(int argc, char* argv[]){
 }
 
 int textEditor(char text[25][80], bool insMode, string fName){
-	int inKey, cursorPosition, x = 0;
-	int y = 2;	//since top 2 lines are uneditable
+	int inKey, cursorPosition, x, y = 0;
 
 	while(!exitFlag){
 		inKey = getch();
-
+		get(stdscr, y, x);
 		switch(inKey){
 			case 27:	//esc
 				exitFlag = true;
 				break;
 			case KEY_LEFT:	//move cursor left
-				if(cursorPosition>0 && insMode==true){	//if cursor isn't all the way left
+				/*if(cursorPosition>0 && insMode==true){	//if cursor isn't all the way left
 					cursorPosition--;
 					x--;
 					move(y,x);
-				}	
+				}*/
+				if(insMode && x > 0)
+					wmvleft(stdscr);
 				break;
 			case KEY_RIGHT:	//move cursor right
 				//if cursor is not all the way right
-				if(cursorPosition < strlen(text[y]) && insMode==true)
+				/*if(cursorPosition < strlen(text[y]) && insMode==true){
 					cursorPosition++;
 					x++;
 					move(y,x);
+				}
+				*/
+				if(insMode)
+					wmvright(stdscr);
 				break;
 			case KEY_UP:	//move cursor up
-				if(y > 1 && insMode==true){	//if not on top line
+				/*if(y > 1 && insMode==true){	//if not on top line
 					if(x > strlen(text[y-1])){
 						y--;
 						x = strlen(text[y]);
@@ -65,10 +70,12 @@ int textEditor(char text[25][80], bool insMode, string fName){
 						y--;
 					}
 					move(y,x);
-				}
+				}*/
+				if(insMode && y > 1)
+					wmvup(stdscr);
 				break;
 			case KEY_DOWN:	//move cursor down
-				if(y < 24 && insMode==true){
+				/*if(y < 24 && insMode==true){
 					if(x > strlen(text[y+1])){
 						y++;
 						x = strlen(text[y]);
@@ -78,7 +85,10 @@ int textEditor(char text[25][80], bool insMode, string fName){
 						y++;
 					}
 					move(y,x);
-				}
+				}*/
+
+				if(insMode && y < 24)
+					wmvleft(stdscr);
 				break;
 			case KEY_F(1):	//change insert or command mode
 				insMode = !insMode;
@@ -89,10 +99,11 @@ int textEditor(char text[25][80], bool insMode, string fName){
 				break;
 			case KEY_F(2):	//save
 				if(insMode == false)	//only if in command mode
+					loadBuf(text);
 					saveFile(fileName, text);
 				break;
 			case 6:	//ctrl+f find+replace
-				find(text);
+				//find(text);
 				break;
 			case KEY_DL:	//delete line
 				if(insMode)	//if insert mode
@@ -100,22 +111,20 @@ int textEditor(char text[25][80], bool insMode, string fName){
 				break;
 			case KEY_ENTER:	//enter or insert new line
 				if(insMode){	//if insert mode
-					insert(text, &y, &cursorPosition);
-					x = cursorPosition;
+					insert();
+					//x = cursorPosition;
 					move(y,x);
 				}
 				break;
 			case KEY_BACKSPACE: //backspace
-				if(insMode){ //if insert mode
-					char ky = inKey;
-					edit(text, &y, &x, ky);
-					move(y,x);
+				if(insMode && x > 0){ //if insert mode
+					backspace(y, x);
 				}
 				break;
 			default:
 				if(insMode && (inKey > 31 && inKey < 127)){	//if insert mode and printing character
 					char ky = inKey;
-					edit(text, &y, &x, ky);
+					editor(ky, y, x);
 					move(y,x);
 				}
 			break;
